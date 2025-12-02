@@ -1,0 +1,55 @@
+@import "tailwindcss";
+
+.main-theme {
+  @apply flex items-center justify-center min-h-screen
+    bg-gradient-to-br from-yellow-200
+    via-orange-400 to-black  p-6 shadow-xl
+}
+
+/* .sidebar {
+  @apply w-1/5 h-3/5 bg-gradient-to-b from-black via-orange-400 
+    to-yellow-200 text-white p-6 shadow-2xl;
+} */
+
+.sidebar {
+  @apply w-72 bg-gradient-to-b from-black via-orange-400 
+    to-yellow-200 text-white p-6 shadow-2xl;
+}
+
+.container {
+  @apply flex flex-col gap-4;
+}
+
+.sidebar-title {
+  @apply text-2xl font-bold mb-6 text-center border border-b-1 border-b-gray-400  
+    border-t-0 border-l-0 border-r-0
+}
+
+.sidebar-title h1 {
+  @apply text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r
+    from-purple-300 to-pink-400;
+}
+
+.sidebar-title .btn-edit {
+  @apply bg-blue-600/80 text-white px-4 py-2 rounded-md text-base font-medium;
+}
+
+.sidebar-title .btn-logout {
+  @apply bg-red-600/80 text-white px-4 py-2 rounded-md text-base font-medium;
+}
+
+.sidebar-nav-list {
+  @apply space-y-3;
+}
+
+.sidebar-nav-link {
+  @apply flex items-center gap-2 cursor-pointer hover:bg-white/30 p-2 rounded-lg;
+}
+
+.sidebar-nav-link-active {
+  @apply flex items-center gap-2 cursor-pointer bg-white/30 p-2 rounded-lg transition-colors;
+}
+
+.button {
+  @apply bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-lg py-2 px-4;
+}
