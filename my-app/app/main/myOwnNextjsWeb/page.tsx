@@ -6,6 +6,7 @@ import axios from "axios";
 import React from "react";
 import { Config } from "../../Config";
 import { useRouter } from "next/navigation";
+import api from "@/app/axios";
 
 export default function myOwnNextjsWeb() {
   const [data, setData] = useState<myOwnNextjsWebInterface[]>([]);
@@ -18,12 +19,7 @@ export default function myOwnNextjsWeb() {
   const [itemsPerPage, setItemsPerPage] = useState(10);
   const router = useRouter();
 
-  const getHeaders = () => {
-    const headers = {
-      Authorization: "Bearer " + localStorage.getItem(Config.tokenKey),
-    };
-    return headers;
-  };
+  // axios.defaults.withCredentials = true;
 
   const totalPages = useMemo(() => {
     return Math.ceil(data.length / itemsPerPage);
@@ -38,11 +34,17 @@ export default function myOwnNextjsWeb() {
   useEffect(() => {
     fetchData();
   }, []);
+  
   const fetchData = async () => {
     try {
-      const url = Config.apiUrl + "/myOwnNextjsWeb";
-      const headers = getHeaders();
-      const response = await axios.get(url, { headers });
+      const url = `/myOwnNextjsWeb`;
+
+      const response = await api.get(url);
+      // const response = await axios.get(url, {
+      //   headers: {
+      //     Authorization: `Bearer ${localStorage.getItem("JWT_TOKEN")}`,
+      //   },
+      // });
 
       if (response.status == 200) {
         setData(response.data);
@@ -82,8 +84,8 @@ export default function myOwnNextjsWeb() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      const url = `http://localhost:8080/myOwnNextjsWeb`;
-      await axios.put(url, data);
+      const url = `/myOwnNextjsWeb`;
+      await api.put(url, data);
 
       fetchData();
 
@@ -118,31 +120,6 @@ export default function myOwnNextjsWeb() {
         if (b[k as keyof typeof b] < a[k as keyof typeof a]) return -1;
         if (b[k as keyof typeof b] > a[k as keyof typeof a]) return 1;
         return 0;
-      });
-    }
-  };
-
-  const handleLogout = async () => {
-    try {
-      const button = await Swal.fire({
-        icon: "question",
-        title: "ยืนยันการลงชื่อออก",
-        text: "คุณแน่ใจที่จะลงชื่อออกจากระบบหรือไม่ ?",
-        showCancelButton: true,
-        showConfirmButton: true,
-      });
-
-      if (button.isConfirmed) {
-        // remove cookie
-        document.cookie = `${Config.tokenKey}=; path=/signin; max-age=0`;
-        localStorage.removeItem(Config.tokenKey);
-        router.push("/signin");
-      }
-    } catch (err) {
-      Swal.fire({
-        icon: "error",
-        title: "Error",
-        text: "ไม่สามารถลงชื่อออกได้ : " + err,
       });
     }
   };

@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import Swal from "sweetalert2";
 import { Config } from "../Config";
 import Link from "next/link";
+import api from "../axios";
 
 export default function Sidebar() {
   const [username, setUsername] = useState("");
@@ -30,71 +31,20 @@ export default function Sidebar() {
     }
   };
 
-  const fetchData = async () => {
+   const handleLogout = async () => {
     try {
-      const token = localStorage.getItem(Config.tokenKey);
-
-      if (!token) {
-        // router.push('/');
-        return;
-      }
-
-      const response = await axios.get(
-        `${Config.apiUrl}/api/users/admin-info`,
-        {
-          headers: {
-            Authorization: "Bearer " + token,
-          },
-        }
-      );
-
-      if (response.status === 200) {
-        setUsername(response.data.username);
-        setRole(response.data.role);
-      }
-    } catch (err) {
-      console.log(err);
-      Swal.fire({
-        icon: "error",
-        title: "Error",
-        text: "ไม่สามารถดึงข้อมูลผู้ใช้งานได้ : " + err,
-      });
+      const url = `/logout`;
+      // kill the cookie
+      await api.post(url);
+      
+      router.push('/');
+      
+    } catch (error) {
+      console.error("Logout failed", error);
     }
   };
-  const printsomething = () => {
-    // console.log(typeof Config.tokenKey);
-    // console.log(Config.tokenKey);
-    // console.log(Config.apiKey);
-    // console.log(Config.apiUrl);
-  };
 
-  const handleLogout = async () => {
-    try {
-      const button = await Swal.fire({
-        icon: "question",
-        title: "ยืนยันการลงชื่อออก",
-        text: "คุณแน่ใจที่จะลงชื่อออกจากระบบหรือไม่ ?",
-        showCancelButton: true,
-        showConfirmButton: true,
-      });
-
-      if (button.isConfirmed) {
-        // remove cookie
-        document.cookie = `${Config.tokenKey}=; path=/; max-age=0`;
-        localStorage.removeItem(Config.tokenKey);
-        router.push("/signin");
-        // console.log(document.cookie)
-
-        
-      }
-    } catch (err) {
-      Swal.fire({
-        icon: "error",
-        title: "Error",
-        text: "ไม่สามารถลงชื่อออกได้ : " + err,
-      });
-    }
-  };
+  
 
   const navigateAndSetCurrentPath = (path: string) => {
     router.push(path);
@@ -159,7 +109,7 @@ export default function Sidebar() {
                       className={isActive("/erp/dashboard")}
                     >
                       <i className="fa fa-dashboard mr-2"></i>
-                      <span>Dashboard</span>
+                      <span>Page 1</span>
                     </a>
                   </li>
                 )
@@ -171,7 +121,7 @@ export default function Sidebar() {
                   className={isActive("/erp/stock")}
                 >
                   <i className="fas fa-box-open mr-2"></i>
-                  <span>Stock สินค้า</span>
+                  <span>Page 2</span>
                 </a>
               </li>
               <li className="sidebar-nav-item">
@@ -180,7 +130,7 @@ export default function Sidebar() {
                   className={isActive("/erp/production")}
                 >
                   <i className="fas fa-cogs mr-2"></i>
-                  <span>การผลิตสินค้า</span>
+                  <span>Page 3</span>
                 </a>
               </li>
               <li className="sidebar-nav-item">
@@ -189,7 +139,7 @@ export default function Sidebar() {
                   className={isActive("/erp/sale")}
                 >
                   <i className="fas fa-money-bill-trend-up mr-2"></i>
-                  <span>ขาย</span>
+                  <span>Page 4</span>
                 </a>
               </li>
               {
@@ -203,7 +153,7 @@ export default function Sidebar() {
                         className={isActive("/erp/bill-sale")}
                       >
                         <i className="fas fa-file-invoice-dollar mr-2"></i>
-                        <span>จัดการบิลขาย</span>
+                        <span>Page 5</span>
                       </a>
                     </li>
                     <li className="sidebar-nav-item">
@@ -214,7 +164,7 @@ export default function Sidebar() {
                         className={isActive("/erp/account")}
                       >
                         <i className="fas fa-file-invoice-dollar mr-2"></i>
-                        <span>บัญชี</span>
+                        <span>Page 6</span>
                       </a>
                     </li>
                     <li className="sidebar-nav-item">
@@ -223,7 +173,7 @@ export default function Sidebar() {
                         className={isActive("/erp/report")}
                       >
                         <i className="fas fa-chart-line mr-2"></i>
-                        <span>รายงาน</span>
+                        <span>Page 7</span>
                       </a>
                     </li>
                     <li className="sidebar-nav-item">
@@ -232,7 +182,7 @@ export default function Sidebar() {
                         className={isActive("/erp/user")}
                       >
                         <i className="fas fa-user-alt mr-2"></i>
-                        <span>ผู้ใช้งานระบบ</span>
+                        <span>Page 8</span>
                       </a>
                     </li>
                   </>
@@ -251,7 +201,7 @@ export default function Sidebar() {
       </button>
       <button
         className="text-white ms-3 cursor-pointer"
-        onClick={printsomething}
+        
       >
         <i className="fa fa-bars"></i>
       </button>
